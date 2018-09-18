@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>paperjs</title>
+	<style type="text/css">
+		html,body{
+			height: 100%;
+			background-color: black;
+		}
+		canvas{
+			height: 100%;
+			width: 100%;
+			background-color: black;
+		}
+	</style>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.15/howler.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.11.5/paper-full.js"></script>
+	<script type="text/paperscript" canvas="myCanvas">
+	var ary=[]
+	var maxPoint=new Point(view.size.width,view.size.height);
+	console.log(maxPoint.x/2,maxPoint.y/2);
+	var text = new PointText({
+    point: [maxPoint.x/4, maxPoint.y/1.9],
+    content: 'Welcome!!Click anywhere or press any key!',
+    fillColor: 'yellow',
+    fontFamily: 'Courier New',
+    fontWeight: 'bold',
+    fontSize: 26
+});
+
+	var sound = [new Howl({
+  	src: ['./sounds/bubbles.mp3']
+	}),new Howl({
+  	src: ['./sounds/clay.mp3']
+	}),new Howl({
+  	src: ['./sounds/corona.mp3']
+	})];
+	function getCir(pt){
+	text.scale('0.000001');
+	sound[Math.floor(Math.random()*sound.length)].play();
+	var randomPoint= Point.random();
+	if(pt)
+	point=pt
+	else
+	var point=maxPoint*randomPoint;
+	var myCircle = new Path.Circle(point,300);
+	myCircle.fillColor = randomColor();
+	ary.push(myCircle);
+}
+	function onKeyDown(event) {
+	for(var k=0;k<=8;k++)
+	getCir();
+
+}
+	function randomColor(){
+	return 'rgba('+Math.random()*256+','+Math.random()*256+','+Math.random()*256+')';
+}
+	function onMouseDown(event) {
+	getCir(event.point);
+}
+function onFrame(event) {
+text.fillColor.hue+=0.8;
+text.rotate('0.6');
+for(var i=0;i<ary.length;i++){
+ary[i].fillColor.hue += 1;
+ary[i].scale('0.94');
+}
+
+	
+}
+	</script>
+</head>
+<body>
+<canvas id="myCanvas" resize></canvas>
+</body>
+</html>
